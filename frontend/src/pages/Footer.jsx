@@ -12,8 +12,7 @@ const Footer = () => {
                             
                         </div>
                         <div className="mb-2">
-                            <img src="" alt="BgRemove logo" className="inline-block mr-2" />
-                            <span>© BgRemove, a Canva India GmbH brand</span>
+                            <span>© BgRemove, a Canva India Original brand</span>
                         </div>
                         <div className="text-xs">
                             All trademarks, service marks, trade names, product names, logos and trade dress appearing on our website are the property of their respective owners.

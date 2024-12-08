@@ -1,8 +1,10 @@
 import React from 'react'
+import { useNavigate } from "react-router";
 const Header = () => {
    const handleClick=()=>{
-
+navigate('/login')
    }
+   const navigate = useNavigate()
   return (
     <header className="bg-gray-900 p-4 flex justify-between items-center">
                         <div className="flex items-center">
@@ -15,7 +17,7 @@ const Header = () => {
                             <a href="/pricing" className="text-white">Pricing</a>
                            
                         </nav>
-                        <button type='submit' onClick={handleClick} className="bg-gray-700 font-bold text-white px-4 py-2 rounded hover:bg-white hover:text-black ">Login / Sign up</button>
+                        <button type='submit' onClick={handleClick} className="bg-gray-700 font-bold text-white px-4 py-2 rounded hover:bg-white hover:text-black ">Login</button>
                     </header>
   )
 }
