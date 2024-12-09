@@ -4,7 +4,6 @@ import Home from './pages/Home'
 import Header from './pages/Header'
 import Footer from './pages/Footer'
 import Example from './pages/Example'
-import Price from './pages/Price'
 import SignUp from './pages/SignUp'
 import Login from './pages/Login'
 const App = () => {
@@ -15,7 +14,6 @@ const App = () => {
         <Routes>
           <Route path='/' element={<Home/>} />
           <Route path='/example' element={<Example/>} />
-          <Route path='/price' element={<Price/>} />
           <Route path='/login' element={<Login/>} />
           <Route path='/signup' element={<SignUp/>} />
         </Routes>

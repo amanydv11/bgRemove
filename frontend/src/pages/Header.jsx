@@ -30,10 +30,9 @@ const Header = () => {
                             <i className="fas fa-video text-white text-2xl mr-2"></i>
                             <span className="text-white text-2xl font-bold">BgRemove</span>
                         </div>
-                        <nav className="flex space-x-8">
+                        <nav className="flex font-serif text-lg space-x-8">
                             <a href="/" className="text-white">Home</a>
                             <a href="/example" className="text-white">Examples</a>
-                            <a href="/pricing" className="text-white">Pricing</a>
                            
                         </nav>
                         
