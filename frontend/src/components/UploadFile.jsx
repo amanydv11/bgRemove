@@ -4,16 +4,12 @@ import { BsArrowBarUp } from "react-icons/bs";
 const UploadFile = () => {
   const [file, setFile] = useState(null);
   const [videoURL, setVideoURL] = useState("");
-  const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef(null);
-
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       setFile(selectedFile);
-      const url = URL.createObjectURL(selectedFile); 
-      setVideoURL(url);
-      setUploadProgress(0); 
+      setVideoURL(URL.createObjectURL(selectedFile));
     }
   };
 
@@ -23,23 +19,37 @@ const UploadFile = () => {
     }
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (!file) {
       alert("Please select a video first!");
       return;
     }
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += 10;
-      setUploadProgress(progress);
-      if (progress >= 100) {
-        clearInterval(interval);
-        alert("Upload complete!");
+
+    try {
+      const formData = new FormData();
+      formData.append("video", file);
+      const response = await fetch("/api/video/add", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert("Upload successful!");
+        setFile(null);
+        setVideoURL("");
+        fileInputRef.current.value = "";
+      } else {
+        alert(`Upload failed: ${data.message}`);
       }
-    }, 500);
+    } catch (error) {
+      console.error("Error during upload:", error);
+      alert("An error occurred during upload.");
+    }
   };
+
   return (
-    <div className="upload-file-container" style={{ textAlign: "center" }}>
+    <div className="align-middle">
       <input
         ref={fileInputRef}
         type="file"
@@ -47,93 +57,30 @@ const UploadFile = () => {
         style={{ display: "none" }}
         onChange={handleFileChange}
       />
-      <div
-        className="video-container"
-        style={{
-          width: "500px",
-          height: "280px",
-          margin: "20px auto",
-          backgroundColor: "#000",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          overflow: "hidden",
-          borderRadius: "10px",
-        }}
-      >
+      <div className="w-[500px] h-[280px] m-8 bg-black flex justify-center items-center overflow-hidden rounded">
         {videoURL ? (
           <video
             src={videoURL}
             controls
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
+            className="h-full w-full object-cover"
           ></video>
         ) : (
-          <p style={{ color: "#fff" }}>Select a video to preview</p>
+          <p className="text-white">Select a video to preview</p>
         )}
       </div>
-      {uploadProgress > 0 && (
-        <div
-          className="progress-bar"
-          style={{
-            width: "500px",
-            margin: "10px auto",
-            height: "10px",
-            backgroundColor: "#ddd",
-            borderRadius: "5px",
-            overflow: "hidden",
-          }}
-        >
-          <div
-            style={{
-              width: `${uploadProgress}%`,
-              height: "100%",
-              backgroundColor: "#4caf50",
-              transition: "width 0.3s ease",
-            }}
-          ></div>
-        </div>
-      )}
       <div>
         <button
-          className="upload-button"
+          className="mt-[10px] px-3 py-3 bg-[#007bff] text-white border-none border rounded cursor-pointer inline-flex items-center"
           onClick={handleButtonClick}
-          style={{
-            marginTop: "10px",
-            padding: "10px 20px",
-            backgroundColor: "#007bff",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-            display: "inline-flex",
-            alignItems: "center",
-          }}
         >
-          <BsArrowBarUp className="icon" style={{ marginRight: "5px" }} />
+          <BsArrowBarUp />
           Select Video
         </button>
-
         <button
-          className="upload-button"
+          className="mt-[10px] text-white border-none rounded cursor-pointer inline-flex items-center ml-[10px] px-3 py-3 bg-green-500"
           onClick={handleUpload}
-          style={{
-            marginTop: "10px",
-            marginLeft: "10px",
-            padding: "10px 20px",
-            backgroundColor: "#28a745",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-            display: "inline-flex",
-            alignItems: "center",
-          }}
         >
-          <BsArrowBarUp className="icon" style={{ marginRight: "5px" }} />
+          <BsArrowBarUp />
           Upload Clip
         </button>
       </div>

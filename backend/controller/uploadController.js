@@ -1,28 +1,30 @@
 import {v2 as cloudinary} from "cloudinary"
-import uploadModel from '../models/uploadModel.js'
-
-export const videoAdd = async(req,res,next)=>{
+import fs from 'fs/promises';
+export const videoAdd = async(req,res)=>{
     console.log(req.body);
-try {
-    const videoFile = req.file;
-    if (!videoFile) {
-        return res.status(400).json({ success: false, message: "No video file uploaded" });
+      try {
+        const video = req.file;
+        if (!video) {
+          return res.status(400).json({ success: false, message: "No video file provided" });
+        }
+        const result = await cloudinary.uploader.upload(video.path, {
+          resource_type: "video",
+        });
+        await fs.unlink(video.path);
+        res.status(200).json({
+          success: true,
+          message: "Video uploaded successfully",
+          videoUrl: result.secure_url,
+        });
+      } catch (error) {
+        console.error("Upload error:", error);
+        res.status(500).json({
+          success: false,
+          message: "Failed to upload video",
+          error: error.message,
+        });
       }
-      const result = await cloudinary.uploader.upload(videoFile.path, {
-        resource_type: "video", 
-      });
-      const videoUrl = result.secure_url;
-      return res.status(200).json({
-        success: true,
-        message: "Video uploaded successfully",
-        videoUrl,
-      });
-} catch (error) {
-    console.log(error);
-    
-    res.json({success:false, message:error.message})
-}
-}
-export const videodown = async(req,res,next)=>{
+    };
+export const videodown = async(req,res)=>{
     
 }
