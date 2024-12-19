@@ -30,13 +30,3 @@ const PORT = process.env.PORT || 8000
 app.listen(PORT,()=>{
     console.log(`server connected ${PORT}`)
 });
-
-app.use((err, req, res) => {
-    const statusCode = err.statusCode || 500;
-    const message = err.message || 'Internal Server Error';
-    res.status(statusCode).json({
-      success: false,
-      statusCode,
-      message,
-    });
-  });
